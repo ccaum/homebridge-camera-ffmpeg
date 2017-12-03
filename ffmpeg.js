@@ -252,6 +252,16 @@ FFMPEG.prototype.handleStreamRequest = function(request) {
          '&localrtcpport='+targetVideoPort+'&pkt_size=1378';
         console.log(ffmpegCommand);
         let ffmpeg = spawn('ffmpeg', ffmpegCommand.split(' '), {env: process.env});
+        ffmpeg.stdout.on('data', (data) => {
+          console.log(`stdout: ${data}`);
+        });
+        ffmpeg.stderr.on('data', (data) => {
+          console.log(`stderr: ${data}`);
+        });
+        ffmpeg.on('close', (code) => {
+          console.log(`child process exited with code ${code}`);
+        });
+
         this.ongoingSessions[sessionIdentifier] = ffmpeg;
       }
 
